@@ -5,10 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Programación avanzada en shell (Bash)</title>
 <style>
-:root{--bg:#f3f5f7;--surface:#fff;--ink:#1d2733;--muted:#5b6876;--line:#d5dbe2;--accent:#0b5d7a;--codebg:#1e2a38;--codeink:#e3ecf3;--hl:#f2c14e;
+:root{--bg:#0a0f1c;--surface:#111a2e;--ink:#e8edf7;--muted:#93a0ba;--line:#22304d;--accent:#ff8a3d;--codebg:#060a14;--codeink:#e6edf7;--hl:#ff8a3d;
 box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#141b23;--surface:#1b242e;--ink:#e4eaf0;--muted:#98a5b3;--line:#2c3844;--accent:#6cc4e3;--codebg:#0e141b;--codeink:#dbe6ee}}
-:root[data-theme="dark"]{--bg:#141b23;--surface:#1b242e;--ink:#e4eaf0;--muted:#98a5b3;--line:#2c3844;--accent:#6cc4e3;--codebg:#0e141b;--codeink:#dbe6ee}
+
+:root[data-theme="light"]{--bg:#fdf6ef;--surface:#fff;--ink:#0f1729;--muted:#55607a;--line:#e6d9cc;--accent:#c2410c;--codebg:#0b1220;--codeink:#e6edf7;--hl:#f59e0b}
 html{color-scheme:light dark;scroll-padding-top:env(safe-area-inset-top,0px);scroll-behavior:smooth}
 *,*::before,*::after{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.65 Georgia,"Iowan Old Style",serif}
@@ -37,17 +37,49 @@ td:first-child{white-space:nowrap}
 .ex{border-left:4px solid var(--accent);background:var(--surface);padding:10px 14px;margin:12px 0;font-family:system-ui,sans-serif;font-size:15px}
 @media(max-width:820px){.wrap{display:block}nav{position:static;height:auto;border:0;border-bottom:1px solid var(--line);padding:16px 20px}main{padding:24px 20px 60px}}
 a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+#bar{position:fixed;top:0;left:0;height:4px;width:0;background:var(--accent);z-index:50}
+.hero{background:linear-gradient(135deg,#111a2e 35%,#d9560b);color:#fff;padding:28px;border-radius:14px;margin-bottom:18px}
+.hero h1{color:#fff;margin:0 0 8px}
+.hero p{margin:0 0 12px;opacity:.92;font-family:system-ui,sans-serif}
+.chips span{display:inline-block;background:rgba(255,255,255,.18);padding:4px 12px;border-radius:20px;margin:0 6px 6px 0;font:13px system-ui,sans-serif}
+section{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:22px 26px;margin-top:20px}
+.note,.ex{background:var(--bg)}table{background:transparent}tr:hover td{background:color-mix(in srgb,var(--accent) 8%,transparent)}
+nav a.on{color:var(--accent);font-weight:600;border-left:3px solid var(--accent);padding-left:8px}
+nav input{width:100%;padding:7px 10px;border:1px solid var(--line);border-radius:6px;background:var(--surface);color:var(--ink);margin-bottom:10px;font:14px system-ui,sans-serif}
+section>h2{cursor:pointer;user-select:none}
+section>h2::after{content:"▾";float:right;transition:transform .2s}
+section.shut>h2::after{transform:rotate(-90deg)}
+section.shut>*:not(h2){display:none}
+pre{position:relative}
+.cp{position:absolute;top:6px;right:6px;padding:3px 9px;border:0;border-radius:5px;background:rgba(255,255,255,.15);color:var(--codeink);font:12px system-ui,sans-serif;cursor:pointer}
+#tt{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));padding:9px 14px;border:1px solid var(--line);border-radius:20px;background:var(--surface);color:var(--ink);font:14px system-ui,sans-serif;cursor:pointer;z-index:40}
+.q{background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin:12px 0;font-family:system-ui,sans-serif}
+.qt{font-weight:600;margin:0 0 8px}
+.op{display:block;width:100%;text-align:left;padding:9px 12px;margin:6px 0;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink);font:15px system-ui,sans-serif;cursor:pointer}
+.op:hover,.op:focus-visible{border-color:var(--accent)}
+.op.ok{background:#1f8a4c;color:#fff;border-color:#1f8a4c}.op.ko{background:#c0392b;color:#fff;border-color:#c0392b}
+.qe{margin:6px 0 0;color:var(--muted);font-size:14px}
+.score{font:600 17px system-ui,sans-serif;color:var(--accent)}
+#rs{padding:9px 18px;border:0;border-radius:8px;background:var(--accent);color:var(--bg);font:15px system-ui,sans-serif;cursor:pointer}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
+.q{display:none}.q.cur{display:block}
+.qn{display:flex;align-items:center;justify-content:space-between;margin:10px 0 16px;font:600 15px system-ui,sans-serif}
+.qn button{width:48px;height:40px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink);font-size:20px;cursor:pointer}
+.qn button:hover:not(:disabled),.qn button:focus-visible{border-color:var(--accent)}
+.qn button:disabled{opacity:.35;cursor:default}
 </style>
 </head>
 <body>
 <div class="wrap">
 <nav aria-label="Índice">
-<b>Contenido</b>
-<a href="#c1">1. Introducción</a><a href="#c2">2. Modos de operación</a><a href="#c3">3. Redirecciones</a><a href="#c4">4. Variables</a><a href="#c5">5. Expresiones</a><a href="#c6">6. Entrecomillado y expansión</a><a href="#c7">7. Programación estructurada</a><a href="#c8">8. Funciones</a><a href="#c9">9. Características especiales</a><a href="#c10">10. Referencias</a>
+<b>Contenido</b><input id="sq" type="search" placeholder="Buscar en el curso…" aria-label="Buscar en el curso">
+<a href="#c1">1. Introducción</a><a href="#c2">2. Modos de operación</a><a href="#c3">3. Redirecciones</a><a href="#c4">4. Variables</a><a href="#c5">5. Expresiones</a><a href="#c6">6. Entrecomillado y expansión</a><a href="#c7">7. Programación estructurada</a><a href="#c8">8. Funciones</a><a href="#c9">9. Características especiales</a><a href="#c10">10. Referencias</a><a href="#quiz">Test final (25)</a>
 </nav>
 <main>
-<h1>Programación avanzada en shell</h1>
-<p class="sub">Curso 03-55 · Ramón M. Gómez Labrador · Universidad de Sevilla · Guía de scripting con BASH</p>
+<div id="bar"></div>
+<header class="hero"><h1>Programación avanzada en shell</h1><p>Aprende a automatizar tareas en Linux con Bash, de las redirecciones a las funciones.</p><div class="chips"><span>10 capítulos</span><span>Ejemplos de código</span><span>Test de 25 preguntas</span></div></header>
+<p class="sub">Curso 03-55 · Guía de scripting con BASH</p>
+<p class="sub"><strong>Autor:</strong> Ramón M. Gómez Labrador (ramon.gomez@eii.us.es)<br>Universidad de Sevilla</p>
 
 <section id="c1"><h2>1. Introducción</h2>
 <p>El intérprete de mandatos («shell») es la interfaz principal entre el usuario y el sistema. Es a la vez una interfaz de ejecución de órdenes y un lenguaje de programación que permite crear nuevas órdenes llamadas guiones o «shellscripts».</p>
@@ -509,7 +541,63 @@ diff usu03 usu04</code></pre>
 <section id="c10"><h2>10. Referencias</h2>
 <ul><li>B. Fox, C. Ramey: «BASH(1)» (páginas de manual de BASH v2.5a), 2001.</li><li>C. Ramey, B. Fox: «Bash Reference Manual, v2.5a». Free Software Foundation, 2001.</li><li>Mike G, trad. G. Rodríguez Alborich: «Programación en BASH – COMO de Introducción», 2000.</li><li>M. Cooper: «Advanced Bash-Scripting Guide, v2.1». Linux Documentation Project, 2003.</li><li>R. M. Gómez Labrador: «Administración de Sistemas Linux Red Hat». Universidad de Sevilla, 2002.</li><li>Proyecto GNU: gnu.org · The Linux Documentation Project: tldp.org · Proyecto HispaLinux: hispalinux.es</li></ul>
 </section>
+<section id="quiz"><h2>Test final</h2><p>Comprueba lo aprendido: 25 preguntas con corrección inmediata.</p><p class="score" id="sc"></p><div id="qz"></div><div class="qn"><button id="pv" aria-label="Pregunta anterior">←</button><span id="pg"></span><button id="nx" aria-label="Pregunta siguiente">→</button></div><p class="score" id="res"></p><button id="rs">Reiniciar test</button></section>
 </main>
 </div>
+<script>
+(function(){
+const Q=[
+['¿Qué descriptor corresponde a la salida de error estándar?',['0','1','2','3'],2,'stdin es 0, stdout es 1 y stderr es 2.'],
+['¿Qué hace la redirección «>> fichero»?',['Borra el fichero y escribe','Añade datos al final sin borrar','Lee desde el fichero','Falla si no existe'],1,'Abre el fichero para añadir al final.'],
+['¿Por qué «ls * >f 2>&1» y «ls * 2>&1 >f» pueden dar resultados distintos?',['Por el tamaño del fichero','Las redirecciones se procesan de izquierda a derecha','Uno usa tuberías','No dan resultados distintos'],1,'El orden importa al duplicar descriptores.'],
+['¿Qué filtro muestra o quita las líneas repetidas?',['sort','uniq','cut','wc'],1,'uniq muestra o quita líneas repetidas.'],
+['¿Qué hace «tee»?',['Ordena la entrada','Envía la entrada a la salida normal y a un fichero','Cuenta líneas','Ejecuta en segundo plano'],1,'Sirve para ver y registrar resultados a la vez.'],
+['¿Qué variable contiene el PID del proceso actual?',['$?','$#','$$','$!'],2,'Se usa para nombres de ficheros temporales únicos.'],
+['¿Qué contiene «$#»?',['El código de retorno','El número de parámetros','El PID','El nombre del programa'],1,'$? es el código de retorno y $0 el nombre.'],
+['¿Qué distingue a «$@» de «$*»?',['$@ trata cada parámetro como una palabra distinta','$@ solo contiene el primero','$* es de solo escritura','Nada'],0,'«$*» los junta en una sola cadena.'],
+['¿Qué mandato interno evalúa expresiones aritméticas?',['test','let','read','shift'],1,'let trabaja con enteros.'],
+['Tras «let a=5» y «let b=$a+3*9», ¿cuánto vale b?',['72','32','27','45'],1,'3*9=27 y 5+27=32.'],
+['¿Con qué cláusula se declara una matriz?',['array','declare -a','list','let -a'],1,'Las matrices son de una sola dimensión.'],
+['¿Qué operador comprueba que un fichero es un directorio?',['-f','-e','-d','-L'],2,'-f es fichero normal, -e existe y -L enlace simbólico.'],
+['«F1 -nt F2» es cierto si…',['F1 es más nuevo que F2','F1 es más antiguo que F2','Son el mismo archivo','F1 no existe'],0,'-ot es «más antiguo» y -ef «mismo archivo».'],
+['¿Qué operador numérico significa «mayor que»?',['-lt','-gt','-eq','-ne'],1,'-lt menor, -eq igual y -ne distinto.'],
+['¿Qué conservan las comillas simples?',['Solo las variables','El valor literal de todos los caracteres','Solo los espacios','Nada, expanden $'],1,'Las dobles sí expanden $.'],
+['¿Cuál es la primera expansión que realiza BASH?',['Tilde','Parámetro','Llaves','Ficheros'],2,'Orden: llaves, tilde, parámetro, mandato, aritmética, proceso, palabras, ficheros.'],
+['¿Qué muestra «echo a{b,c,d}e»?',['a{b,c,d}e','abe ace ade','abcde','ae'],1,'Se añade prefijo y sufijo a cada cadena.'],
+['¿Qué devuelve «${FICHERO##*.}»?',['El nombre sin extensión','La extensión del fichero','La longitud','El directorio'],1,'Quita el patrón máximo desde el principio.'],
+['¿Qué hace «${1:-pepe}»?',['Asigna pepe siempre','Devuelve $1 o, si es nulo, «pepe»','Da error si es nulo','Cuenta caracteres'],1,':- es el valor por defecto.'],
+['¿Cómo se escribe una expansión aritmética?',['$(( expresión ))','${ expresión }','$[[ expresión ]]','$( expresión )'],0,'También vale la forma antigua $[expresión].'],
+['En «cmd1 && cmd2», ¿cuándo se ejecuta cmd2?',['Siempre','Si cmd1 termina con éxito','Si cmd1 falla','En paralelo'],1,'Con || se ejecuta si el anterior falla.'],
+['¿Cómo termina cada bloque de un «case»?',['fi','done','Con ;;','Con break'],2,'La estructura completa acaba con esac.'],
+['¿Cuándo se repite un bucle «until»?',['Mientras la condición sea cierta','Hasta que la condición sea cierta','Una sola vez','Por cada parámetro'],1,'while repite mientras sea cierta.'],
+['¿Qué efecto tiene declarar una variable con «local» en una función?',['Es global','Su ámbito es interno a la función','Es de solo lectura','Se exporta'],1,'Permite funciones recursivas sin interferencias.'],
+['¿Para qué sirve «trap»?',['Suspender procesos','Ejecutar un mandato al recibir una señal','Leer del teclado','Crear matrices'],1,'EXIT y ERR capturan el fin del script y los errores.']
+];
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const bar=$('#bar');
+addEventListener('scroll',()=>{const h=document.documentElement;bar.style.width=(h.scrollTop/((h.scrollHeight-h.clientHeight)||1)*100)+'%'});
+const links=$$('nav a');
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)links.forEach(a=>a.classList.toggle('on',a.getAttribute('href')==='#'+e.target.id))}),{rootMargin:'-20% 0px -70% 0px'});
+$$('section').forEach(s=>io.observe(s));
+$$('section>h2').forEach(h=>h.addEventListener('click',()=>h.parentElement.classList.toggle('shut')));
+links.forEach(a=>a.addEventListener('click',()=>{const s=$(a.getAttribute('href'));if(s)s.classList.remove('shut')}));
+$$('pre').forEach(p=>{const b=document.createElement('button');b.className='cp';b.textContent='Copiar';b.onclick=()=>{try{navigator.clipboard.writeText(p.querySelector('code').innerText).then(()=>{b.textContent='Copiado';setTimeout(()=>b.textContent='Copiar',1200)},()=>{})}catch(e){}};p.appendChild(b)});
+$('#sq').addEventListener('input',e=>{const v=e.target.value.toLowerCase();$$('section').forEach(s=>{s.style.display=(!v||s.textContent.toLowerCase().includes(v))?'':'none'})});
+const t=document.createElement('button');t.id='tt';t.textContent='Cambiar tema';
+t.onclick=()=>{const r=document.documentElement;const d=r.dataset.theme?r.dataset.theme==='dark':true;r.dataset.theme=d?'light':'dark'};
+document.body.appendChild(t);
+let score=0,done=0,cur=0;
+function show(){$$('.q').forEach((d,i)=>d.classList.toggle('cur',i===cur));$('#pg').textContent='Pregunta '+(cur+1)+' de '+Q.length;$('#pv').disabled=cur===0;$('#nx').disabled=cur===Q.length-1}
+function upd(){$('#sc').textContent='Aciertos: '+score+' · Respondidas: '+done+' de '+Q.length;
+if(done===Q.length)$('#res').textContent='Resultado final: '+score+'/'+Q.length+(score>=22?' · ¡Excelente!':score>=15?' · Bien, repasa los fallos.':' · Conviene repasar los capítulos.')}
+function build(){score=0;done=0;const qz=$('#qz');qz.innerHTML='';$('#res').textContent='';
+Q.forEach((q,i)=>{const d=document.createElement('div');d.className='q';const h=document.createElement('p');h.className='qt';h.textContent=(i+1)+'. '+q[0];d.appendChild(h);const ex=document.createElement('p');ex.className='qe';
+q[1].forEach((o,j)=>{const b=document.createElement('button');b.className='op';b.textContent=o;b.onclick=()=>{if(d.dataset.d)return;d.dataset.d=1;done++;if(j===q[2]){score++;b.classList.add('ok')}else{b.classList.add('ko');d.children[q[2]+1].classList.add('ok')}ex.textContent=q[3];upd()};d.appendChild(b)});
+d.appendChild(ex);qz.appendChild(d)});cur=0;show();upd()}
+$('#pv').onclick=()=>{if(cur>0){cur--;show()}};
+$('#nx').onclick=()=>{if(cur<Q.length-1){cur++;show()}};
+$('#rs').onclick=build;build();
+})();
+</script>
 </body>
 </html>
